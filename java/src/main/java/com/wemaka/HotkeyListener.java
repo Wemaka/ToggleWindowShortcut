@@ -8,29 +8,22 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import java.util.*;
 
 public class HotkeyListener implements NativeKeyListener {
+	private static final int VC_RSHIFT = 0xe36;
 	private static Map<Set<Integer>, HotkeyCommand> keyShortcut =
 			new HashMap<>();
-	private static Set<Integer> keys = new HashSet<>();
-	private static final int VC_RSHIFT = 0xe36;
+	private static Set<Integer> keys = new LinkedHashSet<>();
 
 	public void nativeKeyPressed(NativeKeyEvent e) {
 		keys.add(e.getKeyCode() == VC_RSHIFT ? NativeKeyEvent.VC_SHIFT : e.getKeyCode());
-
-//		if (keys.isEmpty() || e.getKeyCode() != keys.get(keys.size() - 1)) {
-//			if (e.getKeyCode() == VC_RSHIFT) {
-//				keys.add(NativeKeyEvent.VC_SHIFT);
-//			} else {
-//				keys.add(e.getKeyCode());
-//			}
-//		}
 
 		if (keyShortcut.containsKey(keys)) {
 			keyShortcut.get(keys).execute();
 		}
 
-//		System.out.println(keys);
 //		System.out.println(keys.stream().map(NativeKeyEvent::getKeyText).toList());
-//		System.out.println("-------------------------------------------------");
+
+// 		if (e.getModifiers() == NativeKeyEvent.CTRL_L_MASK && e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
+//		}
 
 		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
 			try {
@@ -42,20 +35,10 @@ public class HotkeyListener implements NativeKeyListener {
 	}
 
 	public void nativeKeyReleased(NativeKeyEvent e) {
-//		for (int i = 0; i < keys.size(); i++) {
-//			if ((
-//					e.getKeyCode() == VC_RSHIFT ? NativeKeyEvent.VC_SHIFT : e.getKeyCode()
-//			) == keys.get(i)) {
-//				keys.remove(i);
-//				break;
-//			}
-//		}
-
 		keys.remove(e.getKeyCode() == VC_RSHIFT ? NativeKeyEvent.VC_SHIFT : e.getKeyCode());
 	}
 
-	public static void registerHotKey(Set<Integer> keys,
-	                                  HotkeyCommand command) {
-		keyShortcut.put(keys, command);
+	public static void registerHotKey(List<Integer> keys, HotkeyCommand command) {
+		keyShortcut.put(new LinkedHashSet<>(keys), command);
 	}
 }

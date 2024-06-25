@@ -4,6 +4,7 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -11,12 +12,15 @@ public class Main {
 		try {
 			GlobalScreen.registerNativeHook();
 
-			HotkeyListener.registerHotKey(Set.of(NativeKeyEvent.VC_CONTROL,
-					NativeKeyEvent.VC_SPACE), WindowManager::winMinimize);
+			HotkeyListener.registerHotKey(
+					List.of(NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SPACE),
+					WindowManager::winMinimize
+			);
 
-			HotkeyListener.registerHotKey(Set.of(NativeKeyEvent.VC_CONTROL,
-							NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_SPACE),
-					WindowManager::winRestore);
+			HotkeyListener.registerHotKey(
+					List.of(NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_SPACE),
+					WindowManager::winRestore
+			);
 
 		} catch (NativeHookException ex) {
 			System.err.println("There was a problem registering the native hook.");
