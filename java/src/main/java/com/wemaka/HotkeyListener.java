@@ -20,18 +20,10 @@ public class HotkeyListener implements NativeKeyListener {
 			keyShortcut.get(keys).execute();
 		}
 
-//		System.out.println(keys.stream().map(NativeKeyEvent::getKeyText).toList());
+		System.out.println(keys.stream().map(NativeKeyEvent::getKeyText).toList());
 
 // 		if (e.getModifiers() == NativeKeyEvent.CTRL_L_MASK && e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
 //		}
-
-		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
-			try {
-				GlobalScreen.unregisterNativeHook();
-			} catch (NativeHookException nativeHookException) {
-				nativeHookException.printStackTrace();
-			}
-		}
 	}
 
 	public void nativeKeyReleased(NativeKeyEvent e) {

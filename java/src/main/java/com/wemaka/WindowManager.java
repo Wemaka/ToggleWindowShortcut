@@ -1,13 +1,15 @@
 package com.wemaka;
 
+import jnr.ffi.types.u_int32_t;
+
 public class WindowManager {
 	private static final int SW_MINIMIZE = 6;
 	private static final int SW_RESTORE = 9;
-	private static int lastWindow = 0;
+	private static long lastWindow = 0;
 
 
 	public static void winMinimize() {
-		int activeWin = User32.INSTANCE.GetForegroundWindow();
+		long activeWin = User32.INSTANCE.GetForegroundWindow();
 
 		if (activeWin != 0) {
 			lastWindow = activeWin;

@@ -4,11 +4,21 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 
 public class Main {
+	public static final String TAG = "ToggleWindow";
+
 	public static void main(String[] args) {
+		new SystemTrayManager(
+				TAG,
+				"java\\src\\main\\resources\\image\\icon.png"
+		).createSystemTray();
+
 		try {
 			GlobalScreen.registerNativeHook();
 
