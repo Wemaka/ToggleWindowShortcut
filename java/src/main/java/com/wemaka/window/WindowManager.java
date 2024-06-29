@@ -1,6 +1,4 @@
-package com.wemaka;
-
-import jnr.ffi.types.u_int32_t;
+package com.wemaka.window;
 
 public class WindowManager {
 	private static final int SW_MINIMIZE = 6;
