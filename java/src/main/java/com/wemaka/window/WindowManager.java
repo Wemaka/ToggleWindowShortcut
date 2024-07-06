@@ -11,13 +11,13 @@ public class WindowManager {
 
 		if (activeWin != 0) {
 			lastWindow = activeWin;
-			User32.INSTANCE.ShowWindow(activeWin, SW_MINIMIZE);
+			User32.INSTANCE.ShowWindowAsync(activeWin, SW_MINIMIZE);
 		}
 	}
 
 	public static void winRestore() {
 		if (lastWindow != 0 && User32.INSTANCE.IsIconic(lastWindow)) {
-			User32.INSTANCE.ShowWindow(lastWindow, SW_RESTORE);
+			User32.INSTANCE.ShowWindowAsync(lastWindow, SW_RESTORE);
 			lastWindow = 0;
 		}
 	}

@@ -7,7 +7,6 @@ import com.wemaka.hotkey.WindowMinimizeCommand;
 import com.wemaka.hotkey.WindowRestoreCommand;
 import com.wemaka.ui.button.ExitButton;
 import com.wemaka.ui.button.ReloadButton;
-import com.wemaka.window.WindowManager;
 import com.wemaka.hotkey.HotkeyHandler;
 import com.wemaka.ui.SystemTrayManager;
 import org.apache.logging.log4j.LogManager;

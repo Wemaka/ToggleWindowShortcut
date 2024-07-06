@@ -9,7 +9,7 @@ public interface User32 {
 	@u_int32_t
 	long GetForegroundWindow();
 
-	boolean ShowWindow(@u_int32_t long hwnd, @u_int32_t long nCmdShow);
+	boolean ShowWindowAsync(@u_int32_t long hwnd, @u_int32_t long nCmdShow);
 
 	boolean IsIconic(@u_int32_t long hwnd);
 }
