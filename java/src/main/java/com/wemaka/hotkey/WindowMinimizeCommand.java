@@ -4,8 +4,8 @@ import com.wemaka.window.WindowManager;
 
 public class WindowMinimizeCommand extends HotkeyCommand {
 
-	public WindowMinimizeCommand(int... keyCodes) {
-		super(keyCodes);
+	public WindowMinimizeCommand(int modifier, int keycode) {
+		super(modifier, keycode);
 	}
 
 	@Override

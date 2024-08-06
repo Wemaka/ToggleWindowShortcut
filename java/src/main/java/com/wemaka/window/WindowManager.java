@@ -1,25 +1,27 @@
 package com.wemaka.window;
 
+import jnr.ffi.Pointer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class WindowManager {
+	private static final Logger log = LogManager.getLogger(WindowManager.class.getName());
 	private static final int SW_MINIMIZE = 6;
 	private static final int SW_RESTORE = 9;
-	private static long lastWindow = 0;
-
+	private static Pointer lastWindow = null;
 
 	public static void winMinimize() {
-		long activeWin = User32.INSTANCE.GetForegroundWindow();
-
-		if (activeWin != 0) {
+		Pointer activeWin = User32.INSTANCE.GetForegroundWindow();
+		if (activeWin != null) {
 			lastWindow = activeWin;
 			User32.INSTANCE.ShowWindow(activeWin, SW_MINIMIZE);
 		}
 	}
 
 	public static void winRestore() {
-		if (lastWindow != 0 && User32.INSTANCE.IsIconic(lastWindow)) {
+		if (lastWindow != null && User32.INSTANCE.IsIconic(lastWindow)) {
 			User32.INSTANCE.ShowWindow(lastWindow, SW_RESTORE);
-			User32.INSTANCE.SetForegroundWindow(lastWindow);
-			lastWindow = 0;
+			lastWindow = null;
 		}
 	}
 }

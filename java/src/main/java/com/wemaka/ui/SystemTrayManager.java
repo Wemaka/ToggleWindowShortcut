@@ -26,7 +26,6 @@ public class SystemTrayManager {
 	public void setTrayTitle(String trayTitle) {
 		if (trayTitle == null || trayTitle.isBlank()) {
 			log.error("Tray title cannot be blank.");
-//			throw new IllegalArgumentException("Tray title cannot be blank.");
 		}
 
 		this.trayTitle = trayTitle;
@@ -35,7 +34,6 @@ public class SystemTrayManager {
 	public void setTrayImagePath(String trayImagePath) {
 		if (trayImagePath == null || !Files.exists(Paths.get(trayImagePath))) {
 			log.error("Image path does not exist.");
-//			throw new IllegalArgumentException("Image path does not exist.");
 		}
 
 		this.trayImagePath = trayImagePath;
@@ -54,28 +52,12 @@ public class SystemTrayManager {
 		systemTray = SystemTray.getSystemTray();
 		popupMenu = new PopupMenu();
 
-//		addMenuItem(popupMenu, "Exit", e -> {
-//			log.info("Exiting");
-//
-//			new ExitButton().click();
-//		});
-//
-//		addMenuItem(popupMenu, "Reload", e -> {
-//			log.info("Reloading");
-//
-//			HotkeyHandler.INSTANCE.reloadListener();
-//		});
-
 		createSystemTrayIcon();
 	}
 
 	private void createSystemTrayIcon() {
 		Image image = Toolkit.getDefaultToolkit().getImage(trayImagePath);
-
 		trayIcon = new TrayIcon(image, trayTitle, popupMenu);
-//		trayIcon.addActionListener(e -> {
-//			System.out.println("Click");
-//		});
 
 		addSystemTray();
 	}
@@ -89,9 +71,10 @@ public class SystemTrayManager {
 	public void addButton(Button button) {
 		if (this.popupMenu != null) {
 			addMenuItem(this.popupMenu, button.getLabel(), button);
+			log.info("Added button: {}", button.getLabel());
 		} else {
-			log.warn(String.format("The %s button cannot be added. PopupMenu " +
-					"is missing.", button.getLabel()));
+			log.warn("The {} button cannot be added. PopupMenu is missing.",
+					button.getLabel());
 		}
 	}
 
@@ -102,7 +85,6 @@ public class SystemTrayManager {
 					TrayIcon.MessageType.INFO);
 		} catch (AWTException e) {
 			log.error("TrayIcon could not be added.");
-//			System.err.println("TrayIcon could not be added.");
 		}
 	}
 }

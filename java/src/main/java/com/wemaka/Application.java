@@ -1,22 +1,17 @@
 package com.wemaka;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.NativeHookException;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.melloware.jintellitype.JIntellitype;
 import com.wemaka.hotkey.WindowMinimizeCommand;
 import com.wemaka.hotkey.WindowRestoreCommand;
 import com.wemaka.ui.button.ExitButton;
-import com.wemaka.ui.button.ReloadButton;
 import com.wemaka.hotkey.HotkeyHandler;
 import com.wemaka.ui.SystemTrayManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-
-
 public class Application {
 	private static final Logger log = LogManager.getLogger(Application.class.getName());
+	private static Application application;
 	public static final HotkeyHandler HOTKEY_HANDLER = new HotkeyHandler();
 	private static final SystemTrayManager systemTrayManager = new SystemTrayManager(
 			"ToggleWindow",
@@ -26,79 +21,34 @@ public class Application {
 	public static void main(String[] args) {
 		systemTrayManager.create();
 		systemTrayManager.addButton(new ExitButton());
-		systemTrayManager.addButton(new ReloadButton());
 
-
-		if (registerHook()) {
-			HotkeyHandler.registerHotkeys(
-					new WindowMinimizeCommand(NativeKeyEvent.VC_CONTROL,
-							NativeKeyEvent.VC_SPACE),
-					new WindowRestoreCommand(NativeKeyEvent.VC_CONTROL,
-							NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_SPACE)
-			);
-
-			addListener(HOTKEY_HANDLER);
-		} else {
+		if (!JIntellitype.isJIntellitypeSupported()) {
+			log.fatal("There was a problem registering the hot key.");
 			System.exit(1);
 		}
 
-//		try {
-//			GlobalScreen.registerNativeHook();
-//
-//			HotkeyListener.registerHotKey(
-//					List.of(NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SPACE),
-//					WindowManager::winMinimize
-//			);
-//
-//			HotkeyListener.registerHotKey(
-//					List.of(NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_SPACE),
-//					WindowManager::winRestore
-//			);
-//
-//		} catch (NativeHookException ex) {
-//			log.error("There was a problem registering the native hook.");
-//			log.error(ex);
-//
-//			System.exit(1);
-//		}
+		application = new Application();
+		application.initJIntellitype();
+
+//		HotkeyHandler.registerHotkeys(
+//				new WindowMinimizeCommand("CTRL+SPACE")
+//		);
+
+		HotkeyHandler.registerHotkeys(
+				new WindowMinimizeCommand(JIntellitype.MOD_CONTROL, ' '),
+				new WindowRestoreCommand(JIntellitype.MOD_CONTROL + JIntellitype.MOD_SHIFT, ' ')
+		);
 	}
 
-	public static boolean registerHook() {
+	public void initJIntellitype() {
 		try {
-			GlobalScreen.registerNativeHook();
-			return true;
-		} catch (NativeHookException e) {
-			log.fatal("There was a problem registering the native hook.");
-			log.fatal(e);
-
-			return false;
+			// initialize JIntellitype with the frame so all windows commands can
+			// be attached to this window
+			JIntellitype.getInstance().addHotKeyListener(HOTKEY_HANDLER);
+//			JIntellitype.getInstance().addIntellitypeListener(this);
+			log.info("JIntellitype initialized");
+		} catch (RuntimeException ex) {
+			log.fatal("Either you are not on Windows, or there is a problem with the JIntellitype library!", ex);
 		}
-	}
-
-	public static boolean unRegisterHook() {
-		try {
-			GlobalScreen.unregisterNativeHook();
-			return true;
-		} catch (NativeHookException e) {
-			log.error("There was a problem unregistering the native hook.");
-			log.error(e);
-
-			return false;
-		}
-	}
-
-	public static void reloadHandler() {
-		HotkeyHandler.clearKeys();
-
-		removeListener(HOTKEY_HANDLER);
-		addListener(HOTKEY_HANDLER);
-	}
-
-	public static void addListener(HotkeyHandler hotkeyHandler) {
-		GlobalScreen.addNativeKeyListener(hotkeyHandler);
-	}
-
-	public static void removeListener(HotkeyHandler hotkeyHandler) {
-		GlobalScreen.removeNativeKeyListener(hotkeyHandler);
 	}
 }

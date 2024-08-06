@@ -4,8 +4,8 @@ import com.wemaka.window.WindowManager;
 
 
 public class WindowRestoreCommand extends HotkeyCommand {
-	public WindowRestoreCommand(int... keyCodes) {
-		super(keyCodes);
+	public WindowRestoreCommand(int modifier, int keycode) {
+		super(modifier, keycode);
 	}
 
 	@Override

@@ -1,17 +1,15 @@
 package com.wemaka.window;
 
 import jnr.ffi.LibraryLoader;
+import jnr.ffi.Pointer;
 import jnr.ffi.types.u_int32_t;
 
 public interface User32 {
 	User32 INSTANCE = LibraryLoader.create(User32.class).load("user32");
 
-	@u_int32_t
-	long GetForegroundWindow();
+	Pointer GetForegroundWindow();
 
-	boolean SetForegroundWindow(@u_int32_t long hwnd);
+	boolean ShowWindow(Pointer hWnd, @u_int32_t long nCmdShow);
 
-	boolean ShowWindow(@u_int32_t long hwnd, @u_int32_t long nCmdShow);
-
-	boolean IsIconic(@u_int32_t long hwnd);
+	boolean IsIconic(Pointer hWnd);
 }
